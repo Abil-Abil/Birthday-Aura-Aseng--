@@ -1,38 +1,97 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Game Ulang Tahun 🎮</title>
+
 <style>
-body { font-family: Arial; text-align: center; background: pink; }
-.hidden { display: none; }h1 { font-size: 40px; } h2 { font-size: 30px; } p { font-size: 20px; }
+body {
+  margin: 0;
+  font-family: Arial;
+  background: pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
 
-button { padding: 12px 25px; margin: 10px; border-radius: 10px; border: none; background: hotpink; color: white; font-size: 18px; cursor: pointer; }
+h1 { font-size: 60px; }
+h2 { font-size: 40px; }
+p { font-size: 28px; }
 
-.gift { font-size: 80px; cursor: pointer; margin: 15px; }
+button {
+  padding: 15px 30px;
+  margin: 10px;
+  border-radius: 15px;
+  border: none;
+  background: hotpink;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
 
-#lives { font-size: 25px; } #timer { font-size: 25px; color: red; }
+.gift {
+  font-size: 100px;
+  cursor: pointer;
+  margin: 15px;
+}
 
-/* shake effect */ .shake { animation: shake 0.5s; }
+#lives { font-size: 30px; }
+#timer { font-size: 30px; color: red; }
 
-@keyframes shake { 0% { transform: translate(0px, 0px); } 25% { transform: translate(5px, -5px); } 50% { transform: translate(-5px, 5px); } 75% { transform: translate(5px, 5px); } 100% { transform: translate(0px, 0px); } } </style>
+.hidden { display: none; }
 
-</head><body><div id="start">
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(10px,-10px); }
+  50% { transform: translate(-10px,10px); }
+  75% { transform: translate(10px,10px); }
+  100% { transform: translate(0,0); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="start">
   <h1>🎮 Mini Game 🎮</h1>
   <p>Bantu Abil cari kado buat Aura 😏</p>
   <button onclick="startGame()">Mulai</button>
-</div><div id="game" class="hidden">
+</div>
+
+<div id="game" class="hidden">
   <h2 id="levelText">Level 1</h2>
-  <h2>Pilih kado, jangan sampai salah ya 😏🎁</h2>
+  <p>Pilih kado, jangan sampai salah ya 😏🎁</p>
   <div id="lives">❤️❤️❤️</div>
-  <div id="timer">⏳ 10</div>  <div id="giftContainer"></div>
-</div><div id="win" class="hidden">
+  <div id="timer">⏳ 10</div>
+  <div id="giftContainer"></div>
+</div>
+
+<div id="win" class="hidden">
   <h1 id="hb"></h1>
   <p id="msg"></p>
-</div><div id="lose" class="hidden">
+</div>
+
+<div id="lose" class="hidden">
   <h1>💀 Kamu kalah!</h1>
   <p>Yahh gagal 😜 ulang lagi!</p>
   <button onclick="restart()">Coba Lagi</button>
-</div><audio id="music"><source src="music.mp3"></audio> <audio id="yippee"><source src="yippee-tbh.mp3"></audio>
+</div>
+
+<!-- AUDIO -->
+<audio id="music">
+  <source src="music.mp3">
+</audio>
+
+<audio id="yippee">
+  <source src="yippee-tbh.mp3">
+</audio>
 
 <script>
 let lives = 3;
@@ -57,7 +116,7 @@ function setupGifts() {
   let container = document.getElementById("giftContainer");
   container.innerHTML = "";
 
-  let total = level === 1 ? 4 : (level === 2 ? 6 : 8);
+  let total = level === 1 ? 4 : 6;
   correctIndex = Math.floor(Math.random() * total);
 
   for (let i = 0; i < total; i++) {
@@ -66,14 +125,13 @@ function setupGifts() {
     span.innerHTML = "🎁";
 
     span.onclick = (i === correctIndex) ? correct : wrong;
-
     container.appendChild(span);
   }
 }
 
 function startTimer() {
   clearInterval(interval);
-  timer = level === 1 ? 10 : (level === 2 ? 7 : 5);
+  timer = level === 1 ? 10 : 7;
   document.getElementById("timer").innerText = "⏳ " + timer;
 
   interval = setInterval(() => {
@@ -112,18 +170,8 @@ function correct() {
     return;
   }
 
-  if (level === 2) {
-    level = 3;
-    alert("Gila 😳 masuk Level 3!");
-    startLevel();
-    return;
-  }
-
-  let yip = document.getElementById("yippee");
-  yip.play().catch(()=>{});
-
-  let music = document.getElementById("music");
-  music.play().catch(()=>{});
+  document.getElementById("yippee").play().catch(()=>{});
+  document.getElementById("music").play().catch(()=>{});
 
   document.getElementById("game").classList.add("hidden");
   document.getElementById("win").classList.remove("hidden");
@@ -131,14 +179,21 @@ function correct() {
   animateText("🎉 Happy Birthday Aura 🎉", "hb");
 
   setTimeout(() => {
-    animateText(`Yeyy Aura sekarang 15 tahun 😆✨\n\nSemoga makin cantik, makin lucu, makin rajin 😤 dan makin bahagia 💕\n\nJangan sering ngambek ya 😜 tapi tetep lucu sih 🧸🌸\n\nSemoga semua impian kamu tercapai 🎯✨\n\nDari: Abil 😎`, "msg");
+    animateText(`Yeyy Aura sekarang 15 tahun 😆✨
+
+Semoga makin cantik, makin lucu, makin rajin 😤 dan makin bahagia 💕
+
+Jangan sering ngambek ya 😜 tapi tetep lucu sih 🧸🌸
+
+Semoga semua impian kamu tercapai 🎯✨
+
+Dari: Abil 😎`, "msg");
   }, 2000);
 }
 
 function lose() {
   clearInterval(interval);
 
-  // shake effect
   document.body.classList.add("shake");
   setTimeout(() => {
     document.body.classList.remove("shake");
@@ -169,5 +224,7 @@ function animateText(text, id) {
     }, i * 40);
   });
 }
-</script></body>
+</script>
+
+</body>
 </html>
